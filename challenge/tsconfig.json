@@ -15,7 +15,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "esModuleInterop": true,
+    "noUncheckedSideEffectImports": true,
+    "types": ["jest", "@testing-library/jest-dom"]
   },
-  "include": ["src"]
+  "include": ["src", "jest.config.ts", "jest.setup.ts"]
 }
