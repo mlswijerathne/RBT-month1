@@ -47,7 +47,7 @@ describe("Component bug detection tests", () => {
 
     render(<Tabs tabs={tabs} onChange={onChange} />);
 
-    const second = screen.getByRole("button", { name: /two/i });
+    const second = screen.getByRole("tab", { name: /two/i });
     await user.click(second);
     expect(onChange).toHaveBeenCalledWith(1);
   });
@@ -57,7 +57,7 @@ describe("Component bug detection tests", () => {
 
     const input = screen.getByRole("textbox");
     const described = input.getAttribute("aria-describedby");
-    expect(described).not.toBeDefined();
+    expect(described).toBeNull();
 
     const alert = screen.getByRole("alert");
     expect(alert).toBeInTheDocument();

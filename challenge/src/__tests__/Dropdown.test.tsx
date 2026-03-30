@@ -59,11 +59,11 @@ describe('Dropdown component', () => {
         <button>Outside</button>
       </div>
     );
-    const trigger = screen.getByText(/out/i);
+    const trigger = screen.getByRole('combobox');
     // Act
     await user.click(trigger);
     expect(screen.getByRole('listbox')).toBeInTheDocument();
-    await user.click(screen.getByText(/outside/i));
+    await user.click(screen.getByRole('button', { name: /outside/i }));
     // Assert
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
