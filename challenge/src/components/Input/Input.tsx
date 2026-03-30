@@ -44,10 +44,10 @@ export function Input({
         onFocus={onFocus}
         onBlur={onBlur}
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={error && id ? `${id}-error` : undefined}
       />
       {error && (
-        <span id={`${id}-error`} className="input-error-text" role="alert">
+        <span id={id ? `${id}-error` : undefined} className="input-error-text" role="alert">
           {error}
         </span>
       )}
