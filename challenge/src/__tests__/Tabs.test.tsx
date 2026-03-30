@@ -15,7 +15,7 @@ describe('Tabs component', () => {
     render(<Tabs tabs={tabs} defaultIndex={0} onChange={onChange} />);
     // Act / Assert initial
     expect(screen.getByText(/first/i)).toBeInTheDocument();
-    const second = screen.getByRole('button', { name: /two/i });
+    const second = screen.getByRole('tab', { name: /two/i });
     await user.click(second);
     // Assert
     expect(screen.getByText(/second/i)).toBeInTheDocument();
