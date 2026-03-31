@@ -22,6 +22,7 @@ export function Button({
       className={`btn btn-${variant} ${disabled ? "btn-disabled" : ""} ${className}`.trim()}
       onClick={onClick}
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
     >
       {loading ? <span className="btn-spinner">Loading...</span> : children}
     </button>

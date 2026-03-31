@@ -3,71 +3,74 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Input } from '../components/Input/Input';
 
-describe('Input component', () => {
-  test('renders with placeholder (Arrange, Act, Assert)', () => {
-    // Arrange
-    render(<Input placeholder="Enter name" />);
-    // Act
-    const el = screen.getByPlaceholderText(/enter name/i);
-    // Assert
-    expect(el).toBeInTheDocument();
+describe('Input', () => {
+  describe('rendering', () => {
+    it('renders with placeholder', () => {
+      render(<Input placeholder="Enter name" />);
+      expect(screen.getByPlaceholderText(/enter name/i)).toBeInTheDocument();
+    });
+
+    it('renders label when provided', () => {
+      render(<Input label="Email" />);
+      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    });
+
+    it('renders required indicator when required', () => {
+      render(<Input label="Name" required />);
+      expect(screen.getByText('*')).toBeInTheDocument();
+      expect(screen.getByLabelText(/name/i)).toBeRequired();
+    });
+
+    it('supports different input types', () => {
+      render(<Input type="password" label="Password" />);
+      expect((screen.getByLabelText(/password/i) as HTMLInputElement).type).toBe('password');
+    });
   });
 
-  test('updates value on change (Arrange, Act, Assert)', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    function Wrapper() {
-      const [value, setValue] = useState('');
-      return <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder="Type" />;
-    }
-    render(<Wrapper />);
-    const el = screen.getByPlaceholderText(/type/i) as HTMLInputElement;
-    // Act
-    await user.type(el, 'hello');
-    // Assert
-    expect(el.value).toBe('hello');
+  describe('interactions', () => {
+    it('updates value on change', async () => {
+      const user = userEvent.setup();
+      function Wrapper() {
+        const [val, setVal] = useState('');
+        return <Input value={val} onChange={(e) => setVal(e.target.value)} placeholder="Type" />;
+      }
+      render(<Wrapper />);
+      const el = screen.getByPlaceholderText(/type/i) as HTMLInputElement;
+      await user.type(el, 'hello');
+      expect(el.value).toBe('hello');
+    });
+
+    it('handles focus and blur callbacks', async () => {
+      const user = userEvent.setup();
+      const onFocus = jest.fn();
+      const onBlur = jest.fn();
+      render(<Input label="Test" onFocus={onFocus} onBlur={onBlur} />);
+      await user.click(screen.getByLabelText(/test/i));
+      await user.tab();
+      expect(onFocus).toHaveBeenCalled();
+      expect(onBlur).toHaveBeenCalled();
+    });
   });
 
-  test('shows error message and aria attributes (Arrange, Act, Assert)', () => {
-    // Arrange
-    render(<Input label="Name" error="Required" />);
-    const input = screen.getByLabelText(/name/i);
-    // Act
-    const alert = screen.getByRole('alert');
-    // Assert
-    expect(alert).toHaveTextContent('Required');
-    expect(input.getAttribute('aria-invalid')).toBe('true');
-    expect(input.getAttribute('aria-describedby')).toBeDefined();
-  });
+  describe('edge cases', () => {
+    it('shows error message and aria-invalid when error provided', () => {
+      render(<Input label="Name" error="Required" />);
+      const input = screen.getByLabelText(/name/i);
+      expect(screen.getByRole('alert')).toHaveTextContent('Required');
+      expect(input.getAttribute('aria-invalid')).toBe('true');
+      expect(input.getAttribute('aria-describedby')).toContain('error');
+    });
 
-  test('validates required field via attribute (Arrange, Act, Assert)', () => {
-    // Arrange
-    render(<Input label="Email" required />);
-    const input = screen.getByLabelText(/email/i);
-    // Act / Assert
-    expect(input).toBeRequired();
-  });
+    it('does not set aria-describedby when no label and error present', () => {
+      render(<Input error="Required" />);
+      const input = screen.getByRole('textbox');
+      expect(input.getAttribute('aria-describedby')).toBeNull();
+    });
 
-  test('handles focus and blur callbacks (Arrange, Act, Assert)', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    const onFocus = jest.fn();
-    const onBlur = jest.fn();
-    render(<Input label="Test" onFocus={onFocus} onBlur={onBlur} />);
-    const input = screen.getByLabelText(/test/i);
-    // Act
-    await user.click(input);
-    await user.tab(); // move focus away
-    // Assert
-    expect(onFocus).toHaveBeenCalled();
-    expect(onBlur).toHaveBeenCalled();
-  });
-
-  test('supports different types (Arrange, Act, Assert)', () => {
-    // Arrange
-    render(<Input type="password" label="PW" />);
-    const input = screen.getByLabelText(/pw/i) as HTMLInputElement;
-    // Act / Assert
-    expect(input.type).toBe('password');
+    it('renders without error state by default', () => {
+      render(<Input label="Clean" />);
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+      expect(screen.getByLabelText(/clean/i).getAttribute('aria-invalid')).toBe('false');
+    });
   });
 });
