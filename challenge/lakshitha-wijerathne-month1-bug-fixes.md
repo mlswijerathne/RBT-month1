@@ -10,13 +10,13 @@
 
 ---
 
-## Bug #2: Button loading prop does not disable interactions
+## Bug #2: Button loading state missing aria-busy attribute
 
 - **Location:** `src/components/Button/Button.tsx:21`
-- **Symptom:** Button in loading state shows a spinner and "Loading..." text but remains clickable, allowing duplicate form submissions
-- **Root Cause:** Same as Bug #1 — the `loading` prop only swapped the button content, it never set the HTML `disabled` attribute
-- **Test Written:** `"shows loading state and disables interactions"` — renders a loading button, clicks it, asserts `toBeDisabled()` and that `onClick` was not called
-- **Fix Applied:** Same fix as Bug #1 — `disabled={disabled || loading}` covers both cases in one attribute
+- **Symptom:** When a Button is in the loading state, screen readers have no way to know the button is busy processing a request. The spinner text "Loading..." is announced, but there is no `aria-busy` signal — assistive technology cannot distinguish a loading button from a button with the label "Loading..."
+- **Root Cause:** The `loading` prop swapped the button content to a spinner but never set `aria-busy="true"` on the `<button>` element. The WAI-ARIA spec uses `aria-busy` to indicate that an element is being updated and its current state is incomplete
+- **Test Written:** `"sets aria-busy when loading"` — renders a Button with `loading={true}`, asserts `aria-busy` attribute equals `"true"`
+- **Fix Applied:** Added `aria-busy={loading || undefined}` to the `<button>` element so the attribute is present (`"true"`) during loading and absent when not loading
 
 ---
 
