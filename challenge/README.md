@@ -1,57 +1,118 @@
-# Hearts Component Library
+# Hearts Component Library — Month 1 Submission
 
-A React component library with **8 UI components**, **0% test coverage**, and **5 hidden bugs**.
+**Participant:** Lakshitha Wijerathne
+**Track:** Engineer
+**Challenge:** Code Quality & Testing Foundations
 
-Your mission: set up testing, write comprehensive tests, find all the bugs, and fix them using TDD.
+---
 
-## Getting Started
+## Submission Files
 
+| File | Description |
+|------|-------------|
+| `lakshitha-wijerathne-month1-test-suite.zip` | All test files (unit, integration, E2E) |
+| `lakshitha-wijerathne-month1-coverage-report.html` | Jest HTML coverage report |
+| `lakshitha-wijerathne-month1-bug-fixes.md` | Bug documentation (5 bugs) |
+| `lakshitha-wijerathne-month1-tdd-commits.md` | Git log showing TDD progression |
+
+---
+
+## Results Summary
+
+### Test Coverage
+
+| Metric | Result | Threshold |
+|--------|--------|-----------|
+| Statements | 100% | 80% |
+| Branches | 95.74% | 80% |
+| Functions | 100% | 80% |
+| Lines | 100% | 80% |
+
+### Test Suites
+
+| Suite | Tests | Status |
+|-------|-------|--------|
+| Alert | 8 | Passed |
+| Button | 12 | Passed |
+| Card | 11 | Passed |
+| Dropdown | 8 | Passed |
+| Input | 10 | Passed |
+| Modal | 10 | Passed |
+| Tabs | 8 | Passed |
+| Toggle | 9 | Passed |
+| Bug fixes (components) | 5 | Passed |
+| Integration | 6 | Passed |
+| **Total** | **87** | **All passed** |
+
+### Cypress E2E
+
+| Spec | Tests | Status |
+|------|-------|--------|
+| app.cy.ts | 10 | All passed |
+
+---
+
+## Bugs Fixed (TDD)
+
+| # | Component | Bug | Fix |
+|---|-----------|-----|-----|
+| 1 | Button | `disabled` prop not preventing clicks | Added `disabled={disabled \|\| loading}` to `<button>` |
+| 2 | Button | Loading state missing `aria-busy` | Added `aria-busy={loading \|\| undefined}` |
+| 3 | Toggle | `onChange` callback never called | Added `onChange?.(!isChecked)` in `handleClick` |
+| 4 | Tabs | `onChange` passing 1-based index | Changed `onChange?.(index + 1)` to `onChange?.(index)` |
+| 5 | Input | `aria-describedby` containing `"undefined"` | Guarded attribute with `error && id` check |
+
+Full details in `lakshitha-wijerathne-month1-bug-fixes.md`.
+
+---
+
+## How to Run
+
+### Install dependencies
 ```bash
 npm install
-npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) to see the component demos.
+### Run unit and integration tests
+```bash
+npm test
+```
+
+### Run with coverage report
+```bash
+npm run test:coverage
+```
+
+### Run Cypress E2E tests
+```bash
+npm run dev          # start dev server first
+npm run cypress:run  # run E2E headless
+```
+
+### View component demos
+```bash
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173)
+
+---
 
 ## Components
 
-| # | Component | Location | Description |
-|---|-----------|----------|-------------|
-| 1 | Button | `src/components/Button/` | Click handling, variants, disabled, loading |
-| 2 | Input | `src/components/Input/` | Text input, validation, error states |
-| 3 | Modal | `src/components/Modal/` | Open/close, backdrop click, Escape key |
-| 4 | Card | `src/components/Card/` | Layout, image, actions |
-| 5 | Dropdown | `src/components/Dropdown/` | Selection, keyboard nav, click-outside |
-| 6 | Toggle | `src/components/Toggle/` | On/off state, accessibility |
-| 7 | Alert | `src/components/Alert/` | Variants, dismissible |
-| 8 | Tabs | `src/components/Tabs/` | Tab switching, controlled/uncontrolled |
+| # | Component | Location |
+|---|-----------|----------|
+| 1 | Button | `src/components/Button/` |
+| 2 | Input | `src/components/Input/` |
+| 3 | Modal | `src/components/Modal/` |
+| 4 | Card | `src/components/Card/` |
+| 5 | Dropdown | `src/components/Dropdown/` |
+| 6 | Toggle | `src/components/Toggle/` |
+| 7 | Alert | `src/components/Alert/` |
+| 8 | Tabs | `src/components/Tabs/` |
 
-## Challenge Tasks
+## Tech Stack
 
-### Part 1: Testing Environment Setup (20 min)
-- Configure Jest with `jsdom` test environment
-- Set up React Testing Library
-- Configure coverage thresholds at 80%
-- Create `jest.config.js`, `jest.setup.js`, `cypress.config.js`
-
-### Part 2: Unit Tests (60 min)
-- Write tests for all 8 components
-- Test rendering, interactions, and edge cases
-- Use accessible queries (`getByRole`, `getByLabelText`)
-
-### Part 3: Bug Hunting with TDD (25 min)
-- Find 5 hidden bugs through testing
-- Fix each using Red-Green-Refactor
-- Document each bug fix
-
-### Part 4: Integration & E2E (15 min)
-- Write 3 integration tests
-- Write 1 Cypress E2E test
-- Verify 80%+ coverage
-
-## Deliverables
-
-1. Complete test suite (`.test.tsx` files)
-2. Coverage report (80%+ lines, branches, functions)
-3. Bug fix documentation (Markdown)
-4. TDD commit history (git log showing red-green-refactor)
+- React 18 + TypeScript
+- Jest 30 + React Testing Library
+- Cypress 15
+- Vite 6
